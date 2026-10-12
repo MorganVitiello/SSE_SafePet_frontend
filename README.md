@@ -1,4 +1,7 @@
-# 🐾 SafePet_frontend
+# 🐾 SSE_SafePet_frontend
+
+aggiungere info su progetto sostenibilità
+
 ## 📚 Indice
 * [Overview frontend](#overview-frontend)
   * [Obiettivi e Componenti Principali](#Obiettivi-e-Componenti-Principali)
