@@ -12,7 +12,7 @@ const TeamMember = ({ name, surname, github, image }: TeamMemberProps) => {
     return (
         <div className="team-member">
             <div className="member-image-wrapper">
-                <img src={image} alt={`${name} ${surname}`} className="member-image" />
+                <img src={image} alt={`${name} ${surname}`} className="member-image" width={250} height={250} loading="lazy" decoding="async" />
                 <div className="member-overlay">
                     <a href={github} target="_blank" rel="noopener noreferrer" className="github-link">
                         <svg className="github-icon" viewBox="0 0 24 24" fill="currentColor">

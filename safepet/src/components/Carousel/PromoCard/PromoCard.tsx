@@ -13,7 +13,7 @@ function PromoCard ({title, image, tag, description} : PromoCardProps) {
         <>
             <div className="promo-card">
                 <div className="promo-image">
-                    <img src={image} alt={title} />
+                    <img src={image} alt={title} width={280} height={180} loading="lazy" decoding="async" />
                 </div>
 
                 <div className="promo-content">

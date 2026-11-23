@@ -13,7 +13,7 @@ function BannerHomepage() {
   return (
     <>
         <div className='bannerHomepage-container'>
-            <img className = "logo-banner" src='../imgs/logo2.png'></img>
+            <img className="logo-banner" src="../imgs/logo2.webp" alt="SafePet" width={300} height={85} loading="lazy" decoding="async" />
         </div>
     </>
   );

@@ -62,7 +62,7 @@ function DettagliVeterinario() {
 
             <section className="dettagli-veterinario">
                 <div className="foto-box">
-                    <img src={`../imgs/vetPlaceholder.jpg`} alt="Foto veterinario" />
+                    <img src="../imgs/vetPlaceholder.webp" alt="Foto veterinario" width={200} height={200} decoding="async" />
                 </div>
 
                 <div className="info-box">

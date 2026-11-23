@@ -123,7 +123,7 @@ function InsertLinkingCode() {
                     </div>
 
                     <ImageBanner
-                        imagePath={"../imgs/qr-code-scanner.gif"}
+                        imagePath={"../imgs/qr-code-scanner.webp"}
                         description={"Associa un pet scannerizzando il QR code"}
                         redirectLink={"./"}
                         buttonText={"Scannerizza"}

@@ -7,7 +7,7 @@ const PromoCards = ({ cards = [] }) => {
       {cards.slice(0, 3).map((card, index) => (
         <div key={index} className="promo-card">
           <div className="promo-image">
-            <img src={card.image} alt={card.title} />
+            <img src={card.image} alt={card.title} width={280} height={180} loading="lazy" decoding="async" />
           </div>
 
           <div className="promo-content">

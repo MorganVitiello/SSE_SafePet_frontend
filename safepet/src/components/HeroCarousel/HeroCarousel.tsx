@@ -40,7 +40,7 @@ const HeroCarousel = ({ slides }) => {
       <Slider {...settings}>
         {slides.map((slide, i) => (
           <div key={i} className="carousel-slide">
-            <img src={slide.image} alt={slide.title} />
+            <img src={slide.image} alt={slide.title} width={1280} height={600} decoding="async" />
 
             <div className="slide-content">
               <h1>{slide.title}</h1>

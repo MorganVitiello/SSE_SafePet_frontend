@@ -7,9 +7,9 @@ import { Link } from "react-router-dom";
 
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
-    iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png",
-    iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
-    shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
+    iconRetinaUrl: "../imgs/marker-icon.png",
+    iconUrl: "../imgs/marker-icon.png",
+    shadowUrl: "../imgs/marker-shadow.png",
 });
 
 interface OrariDiAperturaDTO {
@@ -175,8 +175,8 @@ const MappaRealTime = () => {
      * Icona verde scuro utilizzata per il Marker corrispondente alla posizione dell'utente
      */
     const darkGreenMarker = new L.Icon({
-        iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png",
-        shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+        iconUrl: "../imgs/marker-icon-green.png",
+        shadowUrl: "../imgs/marker-shadow.png",
         iconSize: [25, 41],
         iconAnchor: [12, 41],
         popupAnchor: [1, -34],
@@ -261,7 +261,7 @@ const MappaRealTime = () => {
                                     >
                                         <div className="clinic-card-header">
                                             <div className="vet-avatar">
-                                                <img src="../imgs/vetPlaceholder.jpg" alt="Veterinario" />
+                                                <img src="../imgs/vetPlaceholder-50.webp" alt="Veterinario" width={50} height={50} loading="lazy" decoding="async" />
                                             </div>
                                             <div className="clinic-info">
                                                 <h3 className="clinic-name"> Clinica veterinaria {clinica.nomeClinica} </h3>

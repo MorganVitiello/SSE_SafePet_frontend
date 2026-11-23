@@ -273,7 +273,7 @@ const DettagliPaziente: React.FC = () => {
                     {pet.fotoBase64 ? (
                         <img src={`data:image/jpeg;base64,${pet.fotoBase64}`} alt="Foto" />
                     ) : (
-                        <img src="../imgs/vetPlaceholder.jpg" alt="Foto" />
+                        <img src="../imgs/vetPlaceholder.webp" alt="Foto" />
                     )}
                     <strong>{pet.nome}</strong>
                 </div>

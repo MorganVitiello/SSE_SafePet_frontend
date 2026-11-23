@@ -69,7 +69,7 @@ const ElencoVet = () => {
                                 style={{ cursor: "pointer" }}
                             >
                                 <div className="veterinario-image">
-                                    <img src={`../imgs/vetPlaceholder.jpg`} alt={"Foto veterinario"}/>
+                                    <img src="../imgs/vetPlaceholder.webp" alt="Foto veterinario" width={200} height={200} loading="lazy" decoding="async" />
                                 </div>
 
                                 <div className="veterinario-content">

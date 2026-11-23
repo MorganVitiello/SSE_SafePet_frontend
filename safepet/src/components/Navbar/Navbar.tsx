@@ -251,7 +251,7 @@ function Navbar() {
         <div className="navbar light-neutral-10" ref={menuRef}>
           <div>
             <Link to="/">
-              <img height={70} className="logo-img" src="../imgs/logo1v2.png" alt="Logo" />
+              <img width={70} height={70} className="logo-img" src="../imgs/logo1v2.webp" alt="Logo" decoding="async" />
             </Link>
           </div>
 

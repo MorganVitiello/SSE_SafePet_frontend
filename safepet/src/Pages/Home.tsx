@@ -45,35 +45,35 @@ function Home() {
 
     const promoData = [
         {
-            image: "https://images.wagwalkingweb.com/media/daily_wag/blog_articles/hero/1723114015.705158/popular-dogs-hero-1.jpg",
+            image: "../../imgs/promo-1.webp",
             tag: "GESTIONE DIGITALE",
             title: "Libretto sanitario digitale",
             description:
                 "Con SafePet hai un unico libretto sanitario digitale per ogni animale domestico. Tutte le informazioni veterinarie, i vaccini e le terapie sono centralizzati, sempre accessibili e aggiornati in tempo reale.",
         },
         {
-            image: "https://brownvethospital.com/wp-content/uploads/2024/02/when-do-dogs-stop-growing.jpg",
+            image: "../imgs/promo-3.webp",
             tag: "INTEGRAZIONE VETERINARIA",
             title: "Collaborazione tra veterinari e strutture",
             description:
                 "SafePet connette cliniche, ambulatori e medici veterinari in un’unica rete digitale. La piattaforma facilita la condivisione sicura dei dati, riducendo tempi di diagnosi e migliorando la qualità delle cure.",
         },
         {
-            image: "https://d3544la1u8djza.cloudfront.net/APHI/Blog/2023/September/small-breeds-hero.jpg",
+            image: "../../imgs/promo-2.webp",
             tag: "EMERGENZE INTELLIGENTI",
             title: "QR Code e interventi rapidi",
             description:
                 "Ogni animale iscritto dispone di un QR Code identificativo: in caso di emergenza, veterinari o soccorritori possono accedere immediatamente alla sua scheda clinica per un intervento tempestivo e sicuro.",
         },
         {
-            image: "../../imgs/vet-dog.png",
+            image: "../../imgs/vet-dog.webp",
             tag: "INTELLIGENZA ARTIFICIALE",
             title: "Analisi dermatologica con AI",
             description:
                 "La funzionalità SkinDetector utilizza l'intelligenza artificiale per analizzare foto della cute del tuo animale, identificando potenziali problematiche dermatologiche e fornendo un primo riscontro diagnostico orientativo.",
         },
         {
-            image: "../../imgs/map-user.png",
+            image: "../../imgs/map-user.webp",
             tag: "GEOLOCALIZZAZIONE",
             title: "Mappa delle cliniche nelle vicinanze",
             description:
@@ -83,13 +83,13 @@ function Home() {
 
     const slides = [
         {
-            image: "../imgs/dog-wj7msvc5kj9v6cyy.jpg",
+            image: "../imgs/dog-wj7msvc5kj9v6cyy.webp",
             title: "La Salute del Tuo Pet, Sempre con Te",
             text: "Gestisci vaccini, terapie, visite e referti con un unico libretto sanitario digitale.",
             cta: { label: "Scopri i servizi", href: "/features/libretto" }
         },
         {
-            image: "../imgs/pexels.jpeg",
+            image: "../imgs/pexels.webp",
             title: "Un Ecosistema Digitale per Veterinari",
             text: "Agenda smart, schede cliniche avanzate, integrazione con microchip e API per strutture veterinarie.",
             cta: { label: "Per le Strutture", href: "/ElencoVet" }
@@ -114,7 +114,7 @@ function Home() {
                         )}
                         {usernameGlobal && role === CONSTANTS.ROLE.VETERINARIO && (
                             <ImageBanner
-                                imagePath={"../imgs/aggiungi-paziente.jpg"}
+                                imagePath={"../imgs/aggiungi-paziente.webp"}
                                 description={"Vuoi aggiungere un pet alla tua lista di pazienti? Farlo non è mai stato così facile!"}
                                 redirectLink={"/aggiuntaPaziente"}
                                 buttonText={"Andiamo!"}
@@ -123,7 +123,7 @@ function Home() {
 
                         {(!usernameGlobal || role !== CONSTANTS.ROLE.VETERINARIO) && (
                             <ImageBanner
-                                imagePath={"/imgs/use-map.jpg"}
+                                imagePath={"/imgs/use-map.webp"}
                                 description={"Il tuo pet sta male? Trova la clinica aperta più vicina a te grazie alla mappa real time"}
                                 redirectLink={"/mappa"}
                                 buttonText="Vai alla mappa"

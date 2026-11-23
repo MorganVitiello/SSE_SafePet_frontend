@@ -10,7 +10,7 @@ function RegisterPet() {
   const promoData = [
     {
       image:
-        "https://images.wagwalkingweb.com/media/daily_wag/blog_articles/hero/1723114015.705158/popular-dogs-hero-1.jpg",
+        "../../imgs/promo-1.webp",
       tag: "GESTIONE DIGITALE",
       title: "Libretto sanitario digitale",
       description:
@@ -18,7 +18,7 @@ function RegisterPet() {
     },
     {
       image:
-        "https://brownvethospital.com/wp-content/uploads/2024/02/when-do-dogs-stop-growing.jpg",
+        "../imgs/promo-3.webp",
       tag: "INTEGRAZIONE VETERINARIA",
       title: "Collaborazione tra veterinari e strutture",
       description:
@@ -26,7 +26,7 @@ function RegisterPet() {
     },
     {
       image:
-        "https://d3544la1u8djza.cloudfront.net/APHI/Blog/2023/September/small-breeds-hero.jpg",
+        "../../imgs/promo-2.webp",
       tag: "EMERGENZE INTELLIGENTI",
       title: "QR Code e interventi rapidi",
       description:
