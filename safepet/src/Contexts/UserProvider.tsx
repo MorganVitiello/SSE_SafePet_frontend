@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
+import { createContext, useState, useContext, useCallback, useMemo, ReactNode } from 'react';
 
 type UserContextType = {
   usernameGlobal: string;
@@ -19,38 +19,34 @@ type UserProviderProps = {
 };
 
 export const UserProvider = ({ children }: UserProviderProps) => {
-  const [usernameGlobal, setUsernameGlobal] = useState('');
-  const [role, setRole] = useState('');
-  const [isLoaded, setIsLoaded] = useState(false); 
+  const [usernameGlobal, setUsernameGlobal] = useState<string>(() =>
+    typeof window !== 'undefined' ? localStorage.getItem('authUsername') || '' : ''
+  );
+  const [role, setRole] = useState<string>(() =>
+    typeof window !== 'undefined' ? localStorage.getItem('authRole') || '' : ''
+  );
 
-  useEffect(() => {
-    const savedUsername = localStorage.getItem('authUsername');
-    const savedRole = localStorage.getItem('authRole');
-
-    if (savedUsername) setUsernameGlobal(savedUsername);
-    if (savedRole) setRole(savedRole);
-
-    setIsLoaded(true); 
+  const updateUser = useCallback((username: string, newRole: string) => {
+    setUsernameGlobal(username);
+    setRole(newRole);
+    localStorage.setItem('authUsername', username);
+    localStorage.setItem('authRole', newRole);
   }, []);
 
-  const updateUser = (username: string, role: string) => {
-    setUsernameGlobal(username);
-    setRole(role);
-    localStorage.setItem('authUsername', username);
-    localStorage.setItem('authRole', role);
-  };
-
-  const logout = () => {
+  const logout = useCallback(() => {
     setUsernameGlobal('');
     setRole('');
     localStorage.removeItem('authUsername');
     localStorage.removeItem('authRole');
-  };
+  }, []);
 
-  if (!isLoaded) return null;
+  const value = useMemo(
+    () => ({ usernameGlobal, role, updateUser, logout }),
+    [usernameGlobal, role, updateUser, logout]
+  );
 
   return (
-    <UserContext.Provider value={{ usernameGlobal, role, updateUser, logout }}>
+    <UserContext.Provider value={value}>
       {children}
     </UserContext.Provider>
   );

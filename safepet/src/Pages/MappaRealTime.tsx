@@ -7,10 +7,21 @@ import { Link } from "react-router-dom";
 
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
-    iconRetinaUrl: "../imgs/marker-icon.png",
-    iconUrl: "../imgs/marker-icon.png",
-    shadowUrl: "../imgs/marker-shadow.png",
+    iconRetinaUrl: "/imgs/marker-icon.png",
+    iconUrl: "/imgs/marker-icon.png",
+    shadowUrl: "/imgs/marker-shadow.png",
 });
+
+const DARK_GREEN_MARKER = new L.Icon({
+    iconUrl: "/imgs/marker-icon-green.png",
+    shadowUrl: "/imgs/marker-shadow.png",
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+});
+
+const DAYS_OF_WEEK = ['Domenica', 'Lunedi', 'Martedi', 'Mercoledi', 'Giovedi', 'Venerdi', 'Sabato'];
 
 interface OrariDiAperturaDTO {
     giorno: string;
@@ -43,7 +54,7 @@ const StarRating = ({ rating, count }: { rating: number, count: number }) => {
                     key={i}
                     className={i < Math.round(rating) ? "star filled" : "star"}
                 >
-                    ★
+                    ?
                 </span>
             ))}
             <span className="rating-value">({count})</span>
@@ -57,96 +68,78 @@ const MappaRealTime = () => {
     const [error, setError] = useState<string | null>(null);
     const [selectedClinicId, setSelectedClinicId] = useState<number | null>(null);
     const [expandedHoursId, setExpandedHoursId] = useState<number | null>(null);
+    const [mapCenter, setMapCenter] = useState<[number, number] | undefined>();
+    const defaultZoom = 14;
 
     const toggleHours = (e: React.MouseEvent, id: number) => {
         e.stopPropagation();
-        setExpandedHoursId(expandedHoursId === id ? null : id);
+        setExpandedHoursId((prev) => (prev === id ? null : id));
     };
 
     const getTodayHours = (orari: OrariDiAperturaDTO[]): string => {
         if (!orari || orari.length === 0) return "Orari non disponibili";
 
-        const now = new Date();
-        const days = ['Domenica', 'Lunedi', 'Martedi', 'Mercoledi', 'Giovedi', 'Venerdi', 'Sabato'];
-        const currentDay = days[now.getDay()];
+        const currentDay = DAYS_OF_WEEK[new Date().getDay()];
+        const todaySchedule = orari.find((o) => o.giorno.toLowerCase() === currentDay.toLowerCase());
 
-        const todaySchedule = orari.find(o => o.giorno.toLowerCase() === currentDay.toLowerCase());
-
-        if (todaySchedule.aperto24h) {
-            return "Aperto 24h";
-        }
+        if (!todaySchedule) return "Orari non disponibili";
+        if (todaySchedule.aperto24h) return "Aperto 24h";
         return `${todaySchedule.giorno} ${todaySchedule.orarioApertura} - ${todaySchedule.orarioChiusura}`;
     };
 
-    const [mapCenter, setMapCenter] = useState<[number, number]>();
-    const defaultZoom = 14;
-
     useEffect(() => {
-        window.scrollTo(0, 0)
+        window.scrollTo(0, 0);
+        let isActive = true;
+        const controller = new AbortController();
 
-        /**
-         * Invia una richiesta asincrona al server all'indirizzo http://localhost:8080/reportCliniche/mostraMappa per
-         * prelevare i dati delle cinque cliniche (comprese le loro coordinate) più vicine alla posizione del client.
-         *
-         * @param lat Latitudine del client
-         * @param lon Longitudine del client
-         */
-        const fetchCliniche = async (lat?: number, lon?: number) => {
+        const fetchCliniche = async (lat: number, lon: number) => {
             try {
-                if (typeof lat !== 'number' && typeof lon !== 'number') {
-                    console.error("Coordinate non valide: ", lat, lon);
-                    return;
-                }
-                const url = `/reportCliniche/mostraMappa/${lat}/${lon}`;
-
-                const response = await fetch(url, {
+                const response = await fetch(`/reportCliniche/mostraMappa/${lat}/${lon}`, {
                     method: "GET",
+                    signal: controller.signal,
                 });
 
+                if (!isActive) return;
                 if (response.ok) {
                     const data = await response.json();
                     setCliniche(data);
                 } else {
                     setError("Errore durante il recupero delle cliniche.");
                 }
-            } catch (err) {
-                console.error("Errore di connessione:", err);
+            } catch (err: any) {
+                if (!isActive || err?.name === "AbortError") return;
                 setError("Errore di connessione al server.");
             } finally {
-                setLoading(false);
+                if (isActive) setLoading(false);
             }
         };
 
         if ('geolocation' in navigator) {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
-                    if (!position || !position.coords) {
-                        console.warn('Nessuna posizione valida ricevuta');
-                        return;
-                    }
+                    if (!isActive || !position?.coords) return;
                     const { latitude, longitude } = position.coords;
                     setMapCenter([latitude, longitude]);
                     fetchCliniche(latitude, longitude);
                 },
-                (error) => {
-                    console.warn('Errore di geolocalizzazione:', error);
+                (geoErr) => {
+                    if (!isActive) return;
                     let message: string;
-                    switch (error.code) {
-                        case error.PERMISSION_DENIED:
+                    switch (geoErr.code) {
+                        case geoErr.PERMISSION_DENIED:
                             message = "Accesso alla posizione negato dall'utente.";
                             break;
-                        case error.POSITION_UNAVAILABLE:
-                            message = 'Posizione non disponibile (nessun provider disponibile o segnale).';
+                        case geoErr.POSITION_UNAVAILABLE:
+                            message = "Posizione non disponibile (nessun provider disponibile o segnale).";
                             break;
-                        case error.TIMEOUT:
-                            message = 'Timeout nella richiesta di geolocalizzazione.';
+                        case geoErr.TIMEOUT:
+                            message = "Timeout nella richiesta di geolocalizzazione.";
                             break;
                         default:
-                            message = 'Errore sconosciuto nella geolocalizzazione.';
+                            message = "Errore sconosciuto nella geolocalizzazione.";
                     }
-                    console.error(message);
                     setLoading(false);
-                    setError(message)
+                    setError(message);
                 },
                 {
                     enableHighAccuracy: true,
@@ -154,14 +147,16 @@ const MappaRealTime = () => {
                 }
             );
         } else {
-            console.warn('Geolocation API non supportata da questo browser.');
+            setLoading(false);
+            setError("Geolocation API non supportata da questo browser.");
         }
+
+        return () => {
+            isActive = false;
+            controller.abort();
+        };
     }, []);
 
-    /**
-     * Mette in evidenza nell'elenco di cliniche la clinic-card cliccata sulla mappa
-     * @param clinicaId Id della clinica corrispondente al marker cliccato
-     */
     const handleMarkerClick = (clinicaId: number) => {
         setSelectedClinicId(clinicaId);
         const element = document.getElementById(`clinic-card-${clinicaId}`);
@@ -170,31 +165,16 @@ const MappaRealTime = () => {
         }
     };
 
-
-    /**
-     * Icona verde scuro utilizzata per il Marker corrispondente alla posizione dell'utente
-     */
-    const darkGreenMarker = new L.Icon({
-        iconUrl: "../imgs/marker-icon-green.png",
-        shadowUrl: "../imgs/marker-shadow.png",
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34],
-        shadowSize: [41, 41]
-    });
-
     return (
         <div className="page-container mappa-realtime-container">
             <div className="page">
                 <h1 className="page-title">Trova un Veterinario</h1>
-                {/* Main Content: Map + Sidebar */}
                 <div className="main-content">
-                    {/* Map Section */}
                     <div className="map-section">
                         {loading ? (
                             <div className="loading-state">Caricamento mappa...</div>
-                        ) : error ? (
-                            <div className="error-state">{error}</div>
+                        ) : error || !mapCenter ? (
+                            <div className="error-state">{error || "Posizione non disponibile."}</div>
                         ) : (
                             <MapContainer
                                 center={mapCenter}
@@ -207,11 +187,10 @@ const MappaRealTime = () => {
                                     attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
                                 />
 
-
                                 <Marker
                                     key={0}
                                     position={[mapCenter[0], mapCenter[1]]}
-                                    icon={darkGreenMarker}
+                                    icon={DARK_GREEN_MARKER}
                                 >
                                     <Popup>
                                         <div className="marker-popup">Ti trovi qui</div>
@@ -223,7 +202,6 @@ const MappaRealTime = () => {
                                         key={clinica.clinicaId}
                                         position={[clinica.latitudine, clinica.longitudine]}
                                         eventHandlers={{
-                                            // evidenza la clinica nell'elenco
                                             click: () => handleMarkerClick(clinica.clinicaId),
                                         }}
                                     >
@@ -256,12 +234,11 @@ const MappaRealTime = () => {
                                     <div
                                         key={clinica.clinicaId}
                                         id={`clinic-card-${clinica.clinicaId}`}
-                                        className={`clinic-card ${selectedClinicId === clinica.clinicaId ? "selected" : ""
-                                            }`}
+                                        className={`clinic-card ${selectedClinicId === clinica.clinicaId ? "selected" : ""}`}
                                     >
                                         <div className="clinic-card-header">
                                             <div className="vet-avatar">
-                                                <img src="../imgs/vetPlaceholder-50.webp" alt="Veterinario" width={50} height={50} loading="lazy" decoding="async" />
+                                                <img src="/imgs/vetPlaceholder-50.webp" alt="Veterinario" width={50} height={50} loading="lazy" decoding="async" />
                                             </div>
                                             <div className="clinic-info">
                                                 <h3 className="clinic-name"> Clinica veterinaria {clinica.nomeClinica} </h3>
