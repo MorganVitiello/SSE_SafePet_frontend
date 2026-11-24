@@ -1,160 +1,125 @@
+﻿import { Suspense, lazy } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.scss';
 import Navbar from './components/Navbar/Navbar';
-import Home from './Pages/Home';
 import Footer from './components/Footer/Footer';
 import { UserProvider } from './Contexts/UserProvider';
-import Pet from './Pages/Pet';
-import RegisterPet from './Pages/RegisterPet';
-import ElencoVet from './Pages/ElencoVet';
-import DettagliVeterinario from './Pages/DettagliVeterinario';
-import ListaPazienti from "./Pages/ListaPazienti";
-import InsertLinkingCode from "./Pages/InsertLinkingCode";
 import ProtectedRoute from './ProtectedRoute';
 import { CONSTANTS } from './constants';
-import Unauthorized from "./Pages/Unauthorized";
-import Page404 from "./Pages/Page404";
-import ProfiloProprietario from './Pages/ProfiloProprietario';
-import DettagliPaziente from "./Pages/DettagliPaziente";
-import DettagliPet from './Pages/DettagliPet';
-import FAQ from './Pages/FAQ';
-import ChiSiamo from './Pages/ChiSiamo';
-import Contatti from './Pages/Contatti';
-import MappaRealTime from './Pages/MappaRealTime';
-import AnalisiDermatologica from './Pages/AnalisiDermatologica';
+import Home from './Pages/Home';
+
+const FAQ = lazy(() => import('./Pages/FAQ'));
+const Contatti = lazy(() => import('./Pages/Contatti'));
+const ChiSiamo = lazy(() => import('./Pages/ChiSiamo'));
+const MappaRealTime = lazy(() => import('./Pages/MappaRealTime'));
+const Pet = lazy(() => import('./Pages/Pet'));
+const ListaPazienti = lazy(() => import('./Pages/ListaPazienti'));
+const DettagliPet = lazy(() => import('./Pages/DettagliPet'));
+const RegisterPet = lazy(() => import('./Pages/RegisterPet'));
+const AnalisiDermatologica = lazy(() => import('./Pages/AnalisiDermatologica'));
+const InsertLinkingCode = lazy(() => import('./Pages/InsertLinkingCode'));
+const ProfiloProprietario = lazy(() => import('./Pages/ProfiloProprietario'));
+const DettagliPaziente = lazy(() => import('./Pages/DettagliPaziente'));
+const ElencoVet = lazy(() => import('./Pages/ElencoVet'));
+const DettagliVeterinario = lazy(() => import('./Pages/DettagliVeterinario'));
+const Unauthorized = lazy(() => import('./Pages/Unauthorized'));
+const Page404 = lazy(() => import('./Pages/Page404'));
 
 function App() {
-
   return (
     <UserProvider>
       <BrowserRouter>
         <Navbar />
-        <Routes>
-
-          <Route
-            path="/"
-            element={<Home />}
-          />
-
-          <Route
-            path="/faq"
-            element={<FAQ />}
-          />
-
-          <Route path="/contact" element={<Contatti />} />
-
-          <Route path="/about" element={<ChiSiamo />} />
-          <Route path="/mappa" element={<MappaRealTime />} />
-
-          <Route
-            path="/pet"
-            element={
-              <ProtectedRoute allowedRoles={[CONSTANTS.ROLE.PROPRIETARIO]}>
-                <Pet />
-              </ProtectedRoute>
-            }
-          />
-
-
-          <Route
-            path="/pazienti"
-            element={
-              <ProtectedRoute allowedRoles={[CONSTANTS.ROLE.VETERINARIO]}>
-                <ListaPazienti />
-              </ProtectedRoute>
-            }
-          />
-
-
-          <Route
-            path="/dettaglioPet/:id"
-            element={
-              <ProtectedRoute allowedRoles={[CONSTANTS.ROLE.PROPRIETARIO]}>
-                <DettagliPet />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/registerpet"
-            element={
-              <ProtectedRoute allowedRoles={[CONSTANTS.ROLE.PROPRIETARIO]}>
-                <RegisterPet />
-              </ProtectedRoute>
-            }
-          />
+        <Suspense fallback={<div style={{ padding: '2rem', textAlign: 'center' }} aria-busy="true">Caricamento...</div>}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/faq" element={<FAQ />} />
+            <Route path="/contact" element={<Contatti />} />
+            <Route path="/about" element={<ChiSiamo />} />
+            <Route path="/mappa" element={<MappaRealTime />} />
 
             <Route
-                path="/analisiDermatologica"
-                element={
-                    <ProtectedRoute allowedRoles={[CONSTANTS.ROLE.PROPRIETARIO]}>
-                        <AnalisiDermatologica />
-                    </ProtectedRoute>
-                }
+              path="/pet"
+              element={
+                <ProtectedRoute allowedRoles={[CONSTANTS.ROLE.PROPRIETARIO]}>
+                  <Pet />
+                </ProtectedRoute>
+              }
             />
 
-          <Route
-            path="/aggiuntaPaziente"
-            element={
-              <ProtectedRoute allowedRoles={[CONSTANTS.ROLE.VETERINARIO]}>
-                <InsertLinkingCode />
-              </ProtectedRoute>
-            }
-          />
+            <Route
+              path="/pazienti"
+              element={
+                <ProtectedRoute allowedRoles={[CONSTANTS.ROLE.VETERINARIO]}>
+                  <ListaPazienti />
+                </ProtectedRoute>
+              }
+            />
 
-          <Route
-            path="/registerpet"
-            element={
-              <ProtectedRoute allowedRoles={[CONSTANTS.ROLE.PROPRIETARIO]}>
-                <RegisterPet />
-              </ProtectedRoute>
-            }
-          />
+            <Route
+              path="/dettaglioPet/:id"
+              element={
+                <ProtectedRoute allowedRoles={[CONSTANTS.ROLE.PROPRIETARIO]}>
+                  <DettagliPet />
+                </ProtectedRoute>
+              }
+            />
 
-          <Route
-            path="/profilo-proprietario"
-            element={
-              <ProtectedRoute allowedRoles={[CONSTANTS.ROLE.PROPRIETARIO]}>
-                <ProfiloProprietario />
-              </ProtectedRoute>
-            }
-          />
+            <Route
+              path="/registerpet"
+              element={
+                <ProtectedRoute allowedRoles={[CONSTANTS.ROLE.PROPRIETARIO]}>
+                  <RegisterPet />
+                </ProtectedRoute>
+              }
+            />
 
-          <Route
-            path="/DettagliPaziente/:id"
-            element={
-              <ProtectedRoute allowedRoles={[CONSTANTS.ROLE.VETERINARIO]}>
-                <DettagliPaziente />
-              </ProtectedRoute>
-            }
-          />
+            <Route
+              path="/analisiDermatologica"
+              element={
+                <ProtectedRoute allowedRoles={[CONSTANTS.ROLE.PROPRIETARIO]}>
+                  <AnalisiDermatologica />
+                </ProtectedRoute>
+              }
+            />
 
-          <Route path="/ElencoVet" element={<ElencoVet />} />
-          <Route path="/veterinario/:id" element={<DettagliVeterinario />} />
-          <Route path="/unauthorized" element={<Unauthorized />} />
-          <Route path="*" element={<Page404 />} />
+            <Route
+              path="/aggiuntaPaziente"
+              element={
+                <ProtectedRoute allowedRoles={[CONSTANTS.ROLE.VETERINARIO]}>
+                  <InsertLinkingCode />
+                </ProtectedRoute>
+              }
+            />
 
-          <Route
-            path="/ElencoVet"
-            element={<ElencoVet />}
-          />
+            <Route
+              path="/profilo-proprietario"
+              element={
+                <ProtectedRoute allowedRoles={[CONSTANTS.ROLE.PROPRIETARIO]}>
+                  <ProfiloProprietario />
+                </ProtectedRoute>
+              }
+            />
 
-          <Route
-            path="/unauthorized"
-            element={<Unauthorized />}
-          />
+            <Route
+              path="/DettagliPaziente/:id"
+              element={
+                <ProtectedRoute allowedRoles={[CONSTANTS.ROLE.VETERINARIO]}>
+                  <DettagliPaziente />
+                </ProtectedRoute>
+              }
+            />
 
-          <Route
-            path="*"
-            element={<Page404 />}
-          />
-
-        </Routes>
+            <Route path="/ElencoVet" element={<ElencoVet />} />
+            <Route path="/veterinario/:id" element={<DettagliVeterinario />} />
+            <Route path="/unauthorized" element={<Unauthorized />} />
+            <Route path="*" element={<Page404 />} />
+          </Routes>
+        </Suspense>
         <Footer />
       </BrowserRouter>
     </UserProvider>
   );
-
 }
 
 export default App;
