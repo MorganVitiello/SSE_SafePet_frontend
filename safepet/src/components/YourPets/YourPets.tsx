@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./YourPets.scss";
 import Title from "../Title/Title";
+import OptimizedBase64Image from "../OptimizedBase64Image/OptimizedBase64Image";
 
 const YourPets = () => {
   const [pets, setPets] = useState([]);
@@ -53,10 +54,7 @@ const YourPets = () => {
               <div key={pet.id} className="pet-card">
               <div className="pet-image">
                 {pet.fotoBase64 ? (
-                  <img
-                    src={`data:image/jpeg;base64,${pet.fotoBase64}`}
-                    alt={pet.nome}
-                  />
+                  <OptimizedBase64Image base64={pet.fotoBase64} alt={pet.nome} fit="contain" />
                 ) : (
                   <div className="placeholder">Nessuna immagine</div>
                 )}

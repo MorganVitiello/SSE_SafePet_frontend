@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ENV } from "../env";
 import Title from "../components/Title/Title";
+import OptimizedBase64Image from "../components/OptimizedBase64Image/OptimizedBase64Image";
 import "../css/ProfiloPropretario.scss";
 
 interface PetInfo {
@@ -196,10 +197,7 @@ function ProfiloProprietario() {
                   >
                     <div className="pet-image">
                       {pet.fotoBase64 ? (
-                        <img
-                          src={`data:image/jpeg;base64,${pet.fotoBase64}`}
-                          alt={pet.nome}
-                        />
+                        <OptimizedBase64Image base64={pet.fotoBase64} alt={pet.nome} />
                       ) : (
                         <div className="placeholder">Nessuna immagine</div>
                       )}
